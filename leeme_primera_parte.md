@@ -1,20 +1,19 @@
-Guía paso a paso para tu Proyecto "Agencia" con Django 🚀
-# 1️⃣ Crear la carpeta del Proyecto:
+# 1️⃣ Crear la carpeta del Proyecto
 🗂️ Primero, crea la carpeta donde guardarás tu proyecto. Abre la terminal y ejecuta:
 mkdir UIII_Agencia_0330
 
-# 2️⃣ Abrir VS Code sobre la carpeta UIII_Agencia_0330:
+# 2️⃣ Abrir VS Code sobre la carpeta UIII_Agencia_0330
 👨‍💻 Abre VS Code desde la terminal en esa misma carpeta:
-cd UIII_Agencia_0330
+cd UIII_Agencia_0330  
 code .
 
-# 3️⃣ Abrir terminal en VS Code:
+# 3️⃣ Abrir terminal en VS Code
 🔑 Para abrir la terminal, ve a Terminal > New Terminal desde el menú de VS Code. ¡Así podrás ejecutar todos los comandos!
-# 4️⃣ Crear entorno virtual .venv:
+# 4️⃣ Crear entorno virtual .venv
 🛠️ Para crear el entorno virtual, ejecuta este comando en tu terminal:
 python -m venv .venv
 
-# 5️⃣ Activar el entorno virtual:
+# 5️⃣ Activar el entorno virtual
 🚀 Activa tu entorno virtual con:
 En Windows:
 .venv\Scripts\activate
@@ -22,27 +21,27 @@ En Windows:
 En MacOS/Linux:
 source .venv/bin/activate
 
-# 6️⃣ Activar el intérprete de Python en VS Code:
+# 6️⃣ Activar el intérprete de Python en VS Code
 ⚙️ Abre la paleta de comandos en VS Code (presiona Ctrl + Shift + P), luego busca y selecciona: Python: Select Interpreter. ¡Elige el de .venv!
-# 7️⃣ Instalar Django:
+# 7️⃣ Instalar Django
 📦 Con el entorno virtual activado, instala Django con:
 pip install django
 
-# 8️⃣ Crear el Proyecto Backend:
+# 8️⃣ Crear el Proyecto Backend
 🌐 Crea el proyecto Django (sin duplicar la carpeta) con:
 django-admin startproject backend_Agencia .
 
-# 9️⃣ Ejecutar el servidor en el puerto 8030:
+# 9️⃣ Ejecutar el servidor en el puerto 8030
 🖥️ Ejecuta el servidor con:
 python manage.py runserver 8030
 
-🔟 Ver en el navegador:
+# 🔟 Ver en el navegador
 🌍 Copia y pega el link que aparece en la terminal (por ejemplo: http://127.0.0.1:8030/) en tu navegador para ver el proyecto en acción.
-# 1️⃣1️⃣ Crear la Aplicación app_Agencia:
+# 1️⃣1️⃣ Crear la Aplicación app_Agencia
 🚀 Crea la app que manejará toda la lógica de tu agencia:
 python manage.py startapp app_Agencia
 
-# 1️⃣2️⃣ Modelo models.py para "Clientes" (Ya lo tienes):
+# 1️⃣2️⃣ Modelo models.py para "Clientes"
 🔧 Aquí está el código que debes poner en el archivo models.py de tu aplicación app_Agencia para definir los modelos de Clientes, Casas y Pagos:
 from django.db import models
 
@@ -59,7 +58,8 @@ class Cliente(models.Model):
     tipo_cliente = models.CharField(max_length=50, default="Regular")
     observaciones = models.TextField(blank=True, null=True)
 
-    
+    def __str__(self):
+        return self.nombre_completo
 
 
 # ==========================================
@@ -73,9 +73,12 @@ class Casa(models.Model):
     estado = models.CharField(max_length=50)
     fecha_construccion = models.DateField()
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="casas")  
+    # Relación 1 a muchos: un cliente puede tener varias casas
     numero_registro = models.CharField(max_length=50, unique=True)
 
-   
+    def __str__(self):
+        return f"{self.tipo} en {self.ciudad}"
+
 
 # ==========================================
 # MODELO: PAGOS
@@ -88,11 +91,13 @@ class Pago(models.Model):
     descripcion = models.TextField(blank=True, null=True)
     comprobante = models.CharField(max_length=100, blank=True, null=True)
     casas = models.ManyToManyField(Casa, related_name="pagos")
+    # Relación muchos a muchos: una casa puede tener varios pagos y un pago puede aplicarse a varias casas
     estatus_pago = models.CharField(max_length=50, default="Completado")
 
-    
+    def __str__(self):
+        return f"Pago {self.referencia} - ${self.monto}"
 
-# 1️⃣2.5️⃣ Realizar migraciones (makemigrations y migrate):
+# 1️⃣2.5️⃣ Procedimiento para realizar las migraciones (makemigrations y migrate)
 🛠️ Ejecuta estos dos comandos en tu terminal para que Django cree la base de datos:
 Crear migraciones:
 python manage.py makemigrations
@@ -100,9 +105,9 @@ python manage.py makemigrations
 Aplicar migraciones:
 python manage.py migrate
 
-# 1️⃣3️⃣ Trabajar con el modelo CLIENTES:
+# 1️⃣3️⃣ Primero trabajamos con el MODELO: CLIENTES
 ✅ Ya tienes el modelo de Clientes en models.py. Ahora toca trabajar con las vistas.
-# 1️⃣4️⃣ Crear funciones en views.py:
+# 1️⃣4️⃣ En views de app_Agencia crear las funciones con sus códigos correspondientes
 📄 En el archivo views.py de app_Agencia, crea las siguientes funciones para manejar operaciones CRUD en Clientes:
 from django.shortcuts import render, redirect
 from .models import Cliente
@@ -148,88 +153,63 @@ def ver_clientes(request):
     clientes = Cliente.objects.all()
     return render(request, 'clientes/ver_clientes.html', {'clientes': clientes})
 
-# 1️⃣5️⃣ Crear la estructura de carpetas y archivos HTML:
-🗂️ Dentro de app_Agencia/templates/, crea las siguientes carpetas y archivos:
+# 1️⃣5️⃣ Crear la carpeta “templates” dentro de “app_Agencia”
+🗂️ Dentro de app_Agencia, crea las carpetas necesarias para las plantillas:
+mkdir -p app_Agencia/templates
+
+# 1️⃣6️⃣ Crear los archivos HTML (base.html, header.html, navbar.html, footer.html, inicio.html)
+📄 Dentro de app_Agencia/templates, crea los archivos base.html, header.html, navbar.html, footer.html e inicio.html como se describió antes.
+# 1️⃣7️⃣ En el archivo base.html agregar Bootstrap para CSS y JS
+✨ Ya se ha agregado el CDN de Bootstrap tanto para CSS como para JS dentro de base.html.
+# 1️⃣8️⃣ En el archivo navbar.html incluir las opciones
+📝 Agrega las opciones dentro del navbar.html (como se muestra arriba). Utiliza iconos con las clases de Bootstrap Icons.
+# 1️⃣9️⃣ En el archivo footer.html incluir derechos de autor
+🔏 Dentro de footer.html, mantén la información con los derechos de autor y la fecha del sistema.
+# 2️⃣0️⃣ En el archivo inicio.html colocar información del sistema más una imagen
+🖼️ Agrega en inicio.html una descripción del sistema y una imagen de agencia tomada desde la web.
+# 2️⃣1️⃣ Crear la subcarpeta “clientes” dentro de app_Agencia\templates
+🗂️ Crea la subcarpeta clientes dentro de app_Agencia/templates:
 mkdir -p app_Agencia/templates/clientes
 
-Los archivos principales que debes crear son:
-base.html (con Bootstrap):
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agencia</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <header>{% include 'header.html' %}</header>
-    <nav>{% include 'navbar.html' %}</nav>
-    <div class="container mt-4">{% block content %}{% endblock %}</div>
-    <footer>{% include 'footer.html' %}</footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
-navbar.html (menú de navegación):
-<ul class="nav">
-    <li class="nav-item"><a href="/" class="nav-link">Inicio</a></li>
-    <li class="nav-item"><a href="/clientes" class="nav-link">Clientes</a></li>
-    <li class="nav-item"><a href="/casas" class="nav-link">Casas</a></li>
-    <li class="nav-item"><a href="/pagos" class="nav-link">Pagos</a></li>
-</ul>
-
-footer.html (footer fijo al final):
-<footer class="fixed-bottom text-center py-3">
-    <p>&copy; 2025. Creado por Leonardo Rivera Cbtis 128</p>
-</footer>
-
-# 1️⃣6️⃣ Crear la subcarpeta clientes y los archivos HTML:
-🖥️ Dentro de app_Agencia/templates/clientes/, crea estos archivos:
-
-
+# 2️⃣2️⃣ Crear los archivos html con su código correspondiente
+📄 Los archivos para agregar_cliente.html, ver_clientes.html, actualizar_cliente.html, borrar_cliente.html se colocan en app_Agencia/templates/clientes.
 agregar_cliente.html
+{% extends 'base.html' %}
 
+{% block content %}
+<h2>Agregar Cliente</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="nombre_completo">Nombre Completo:</label>
+    <input type="text" name="nombre_completo" required>
+    <label for="telefono">Teléfono:</label>
+    <input type="text" name="telefono" required>
+    <label for="correo">Correo:</label>
+    <input type="email" name="correo" required>
+    <label for="direccion">Dirección:</label>
+    <input type="text" name="direccion" required>
+    <button type="submit">Agregar</button>
+</form>
+{% endblock %}
 
-ver_clientes.html (con tabla de clientes)
-
-
-actualizar_cliente.html
-
-
-borrar_cliente.html
-
-
-# 1️⃣7️⃣ Configurar urls.py de app_Agencia:
-🔗 En app_Agencia/urls.py, configura las rutas:
-from django.urls import path
-from . import views
-
-urlpatterns = [
-    path('', views.inicio_agencia, name='inicio_agencia'),
-    path('clientes/', views.ver_clientes, name='ver_clientes'),
-    path('clientes/agregar/', views.agregar_cliente, name='agregar_cliente'),
-    path('clientes/actualizar/<int:cliente_id>/', views.actualizar_cliente, name='actualizar_cliente'),
-    path('clientes/borrar/<int:cliente_id>/', views.borrar_cliente, name='borrar_cliente'),
-]
-
-# 1️⃣8️⃣ Agregar app_Agencia en settings.py:
-🧑‍💻 En el archivo settings.py de backend_Agencia, agrega tu aplicación en la lista INSTALLED_APPS:
-INSTALLED_APPS = [
-    # Otras apps
-    'app_Agencia',
-]
-
-# 1️⃣9️⃣ Configurar urls.py de backend_Agencia:
-🌍 En el archivo urls.py de backend_Agencia, conecta las URLs de app_Agencia:
-from django.urls import path, include
-
-urlpatterns = [
-    path('', include('app_Agencia.urls')),
-]
-
-# 2️⃣0️⃣ ¡Finalizar y Ejecutar! 🎉
-🎉 ¡Ahora que todo está listo, ejecuta tu servidor en el puerto 8030 con:
+# 2️⃣3️⃣ No utilizar forms.py
+⚠️ No es necesario utilizar forms.py en este proyecto. Todo se maneja con el modelo directamente.
+# 2️⃣4️⃣ Procedimiento para crear el archivo urls.py en app_Agencia
+🔗 En app_Agencia/urls.py, configura las rutas para las vistas del CRUD de Clientes.
+# 2️⃣5️⃣ Procedimiento para agregar app_Agencia en settings.py de backend_Agencia
+🧑‍💻 En el archivo settings.py de backend_Agencia, agrega tu aplicación en la lista INSTALLED_APPS.
+# 2️⃣6️⃣ Realizar las configuraciones correspondientes a urls.py de backend_Agencia
+🌍 En el archivo urls.py de backend_Agencia, conecta las URLs de app_Agencia.
+# 2️⃣7️⃣ Procedimiento para registrar los modelos en admin.py y volver a realizar las migraciones
+💻 Registra tus modelos en admin.py para que se muestren en el panel de administración de Django. Luego, realiza las migraciones.
+# 2️⃣8️⃣ Utilizar colores suaves, atractivos y modernos
+🎨 El diseño debe tener colores suaves, atractivos y modernos, y el código de las páginas web debe ser sencillo.
+# 2️⃣9️⃣ No validar entrada de datos
+⚠️ En esta versión del proyecto, no se validan los datos ingresados por el usuario.
+# 3️⃣0️⃣ Proyecto totalmente funcional
+✅ Con todos los pasos anteriores completados, tendrás un proyecto totalmente funcional.
+# 3️⃣1️⃣ Finalmente ejecutar el servidor en el puerto 8030
+🎉 ¡Ahora ejecuta el servidor con:
 python manage.py runserver 8030
 
-
-¡Y listo! Tienes un proyecto de agencia totalmente funcional con Django 🎉. Si tienes alguna duda o quieres más detalles, ¡aquí estoy para ayudarte!
+¡Y listo! El proyecto estará corriendo correctamente en tu puerto 8030.
