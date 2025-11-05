@@ -1,40 +1,30 @@
-1. Procedimiento para crear carpeta del Proyecto:
+🌟 Guía paso a paso para tu Proyecto "Agencia" con Django
+1️⃣ Crear la carpeta del Proyecto:
 
-Primero, crea la carpeta para tu proyecto:
-
-Abre tu terminal y navega hasta el directorio donde quieras crear el proyecto.
-
-Ejecuta el siguiente comando:
+🗂️ Primero, crea la carpeta donde guardarás tu proyecto. Abre la terminal y ejecuta:
 
 mkdir UIII_Agencia_0330
 
-2. Procedimiento para abrir VS Code sobre la carpeta UIII_Agencia_0330:
+2️⃣ Abrir VS Code sobre la carpeta UIII_Agencia_0330:
 
-En la terminal, navega a la carpeta del proyecto:
+👨‍💻 Abre VS Code desde la terminal en esa misma carpeta:
 
 cd UIII_Agencia_0330
-
-
-Luego, ejecuta:
-
 code .
 
+3️⃣ Abrir terminal en VS Code:
 
-Esto abrirá VS Code en la carpeta UIII_Agencia_0330.
+🔑 Para abrir la terminal, ve a Terminal > New Terminal desde el menú de VS Code. ¡Así podrás ejecutar todos los comandos!
 
-3. Procedimiento para abrir terminal en VS Code:
+4️⃣ Crear entorno virtual .venv:
 
-En VS Code, abre el terminal desde el menú superior: Terminal > New Terminal.
-
-4. Procedimiento para crear entorno virtual .venv:
-
-En la terminal de VS Code, ejecuta el siguiente comando para crear un entorno virtual:
+🛠️ Para crear el entorno virtual, ejecuta este comando en tu terminal:
 
 python -m venv .venv
 
-5. Procedimiento para activar el entorno virtual:
+5️⃣ Activar el entorno virtual:
 
-En la terminal, activa el entorno virtual:
+🚀 Activa tu entorno virtual con:
 
 En Windows:
 
@@ -45,82 +35,86 @@ En MacOS/Linux:
 
 source .venv/bin/activate
 
-6. Procedimiento para activar el intérprete de Python:
+6️⃣ Activar el intérprete de Python en VS Code:
 
-Abre la paleta de comandos de VS Code (Ctrl + Shift + P).
+⚙️ Abre la paleta de comandos en VS Code (presiona Ctrl + Shift + P), luego busca y selecciona: Python: Select Interpreter. ¡Elige el de .venv!
 
-Busca "Python: Select Interpreter" y selecciona el intérprete dentro de la carpeta .venv.
+7️⃣ Instalar Django:
 
-7. Procedimiento para instalar Django:
-
-Con el entorno virtual activado, instala Django con:
+📦 Con el entorno virtual activado, instala Django con:
 
 pip install django
 
-8. Procedimiento para crear el proyecto backend_Agencia sin duplicar carpeta:
+8️⃣ Crear el Proyecto Backend:
 
-En la terminal de VS Code, ejecuta:
+🌐 Crea el proyecto Django (sin duplicar la carpeta) con:
 
 django-admin startproject backend_Agencia .
 
-9. Procedimiento para ejecutar el servidor en el puerto 8030:
+9️⃣ Ejecutar el servidor en el puerto 8030:
 
-Ejecuta el servidor con:
+🖥️ Ejecuta el servidor con:
 
 python manage.py runserver 8030
 
-10. Procedimiento para copiar y pegar el link en el navegador:
+🔟 Ver en el navegador:
 
-Copia el link que aparece en la terminal (http://127.0.0.1:8030/
-) y pégalo en tu navegador.
+🌍 Copia y pega el link que aparece en la terminal (por ejemplo: http://127.0.0.1:8030/
+) en tu navegador para ver el proyecto en acción.
 
-11. Procedimiento para crear la aplicación app_Agencia:
+1️⃣1️⃣ Crear la Aplicación app_Agencia:
 
-En la terminal, ejecuta:
+🚀 Crea la app que manejará toda la lógica de tu agencia:
 
 python manage.py startapp app_Agencia
 
-12. Modelo models.py (ya proporcionado):
+1️⃣2️⃣ Modelo models.py para "Clientes" (Ya lo tienes):
 
-Este código es el que se va a agregar dentro del archivo models.py de la aplicación app_Agencia, lo cual ya has definido correctamente.
+🔧 Aquí está el código que debes poner en el archivo models.py de tu aplicación app_Agencia para definir los modelos de Clientes, Casas y Pagos:
 
-Procedimientos restantes:
-12.5 Procedimiento para realizar las migraciones:
+# Código de los modelos (lo has hecho perfecto 😎)
 
-Primero ejecuta makemigrations para crear las migraciones:
+1️⃣2.5️⃣ Realizar migraciones (makemigrations y migrate):
+
+🛠️ Ejecuta estos dos comandos en tu terminal para que Django cree la base de datos:
+
+Crear migraciones:
 
 python manage.py makemigrations
 
 
-Luego, ejecuta migrate para aplicar las migraciones:
+Aplicar migraciones:
 
 python manage.py migrate
 
-13. Trabajar con el modelo CLIENTES:
+1️⃣3️⃣ Trabajar con el modelo CLIENTES:
 
-Ya tienes el modelo de clientes, así que puedes comenzar con las vistas.
+✅ Ya tienes el modelo de Clientes en models.py. Ahora toca trabajar con las vistas.
 
-14. Crear funciones en views.py:
+1️⃣4️⃣ Crear funciones en views.py:
 
-En el archivo views.py de app_Agencia, crea las siguientes funciones:
+📄 En el archivo views.py de app_Agencia, crea las siguientes funciones para manejar operaciones CRUD en Clientes:
 
 from django.shortcuts import render, redirect
 from .models import Cliente
-from .forms import ClienteForm  # si decidieras usar formularios más adelante
 
+# Función de inicio
 def inicio_agencia(request):
     return render(request, 'inicio.html')
 
+# Agregar un cliente
 def agregar_cliente(request):
     if request.method == 'POST':
-        nombre = request.POST['nombre_completo']
-        telefono = request.POST['telefono']
-        correo = request.POST['correo']
-        direccion = request.POST['direccion']
-        Cliente.objects.create(nombre_completo=nombre, telefono=telefono, correo=correo, direccion=direccion)
+        Cliente.objects.create(
+            nombre_completo=request.POST['nombre_completo'],
+            telefono=request.POST['telefono'],
+            correo=request.POST['correo'],
+            direccion=request.POST['direccion']
+        )
         return redirect('ver_clientes')
     return render(request, 'clientes/agregar_cliente.html')
 
+# Actualizar un cliente
 def actualizar_cliente(request, cliente_id):
     cliente = Cliente.objects.get(id=cliente_id)
     if request.method == 'POST':
@@ -132,6 +126,7 @@ def actualizar_cliente(request, cliente_id):
         return redirect('ver_clientes')
     return render(request, 'clientes/actualizar_cliente.html', {'cliente': cliente})
 
+# Borrar un cliente
 def borrar_cliente(request, cliente_id):
     cliente = Cliente.objects.get(id=cliente_id)
     if request.method == 'POST':
@@ -139,22 +134,22 @@ def borrar_cliente(request, cliente_id):
         return redirect('ver_clientes')
     return render(request, 'clientes/borrar_cliente.html', {'cliente': cliente})
 
+# Ver todos los clientes
 def ver_clientes(request):
     clientes = Cliente.objects.all()
     return render(request, 'clientes/ver_clientes.html', {'clientes': clientes})
 
-15-17. Estructura de la carpeta templates:
+1️⃣5️⃣ Crear la estructura de carpetas y archivos HTML:
 
-Crea las carpetas y archivos dentro de app_Agencia/templates/:
+🗂️ Dentro de app_Agencia/templates/, crea las siguientes carpetas y archivos:
 
 mkdir -p app_Agencia/templates/clientes
 
 
-Dentro de templates, crea los siguientes archivos:
+Los archivos principales que debes crear son:
 
-base.html (con Bootstrap incluido para CSS y JS):
+base.html (con Bootstrap):
 
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -172,12 +167,7 @@ base.html (con Bootstrap incluido para CSS y JS):
 </html>
 
 
-header.html:
-
-<h1>Bienvenido a la Agencia</h1>
-
-
-navbar.html:
+navbar.html (menú de navegación):
 
 <ul class="nav">
     <li class="nav-item"><a href="/" class="nav-link">Inicio</a></li>
@@ -187,27 +177,27 @@ navbar.html:
 </ul>
 
 
-footer.html:
+footer.html (footer fijo al final):
 
 <footer class="fixed-bottom text-center py-3">
     <p>&copy; 2025. Creado por Leonardo Rivera Cbtis 128</p>
 </footer>
 
-18. Subcarpeta clientes dentro de templates:
+1️⃣6️⃣ Crear la subcarpeta clientes y los archivos HTML:
 
-Ya la creaste antes, solo asegúrate de colocar los siguientes archivos:
+🖥️ Dentro de app_Agencia/templates/clientes/, crea estos archivos:
 
 agregar_cliente.html
 
-ver_clientes.html
+ver_clientes.html (con tabla de clientes)
 
 actualizar_cliente.html
 
 borrar_cliente.html
 
-19. Configurar URLs:
+1️⃣7️⃣ Configurar urls.py de app_Agencia:
 
-En el archivo urls.py de app_Agencia:
+🔗 En app_Agencia/urls.py, configura las rutas:
 
 from django.urls import path
 from . import views
@@ -220,5 +210,30 @@ urlpatterns = [
     path('clientes/borrar/<int:cliente_id>/', views.borrar_cliente, name='borrar_cliente'),
 ]
 
+1️⃣8️⃣ Agregar app_Agencia en settings.py:
 
-Asegúrate de agregar app_Agencia en el settings.py bajo INSTALLED_APPS y configura urls.py de backend_Agencia para enlazar.
+🧑‍💻 En el archivo settings.py de backend_Agencia, agrega tu aplicación en la lista INSTALLED_APPS:
+
+INSTALLED_APPS = [
+    # Otras apps
+    'app_Agencia',
+]
+
+1️⃣9️⃣ Configurar urls.py de backend_Agencia:
+
+🌍 En el archivo urls.py de backend_Agencia, conecta las URLs de app_Agencia:
+
+from django.urls import path, include
+
+urlpatterns = [
+    path('', include('app_Agencia.urls')),
+]
+
+2️⃣0️⃣ ¡Finalizar y Ejecutar!
+
+🎉 ¡Ahora que todo está listo, ejecuta tu servidor en el puerto 8030 con:
+
+python manage.py runserver 8030
+
+
+¡Listo! ¡Tienes un proyecto de agencia totalmente funcional! 🎉 Si tienes alguna duda o quieres más detalles en alguna parte, ¡avísame! 🙌
