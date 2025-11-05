@@ -3,32 +3,39 @@
 # CRUD DE CLIENTES CON BOOTSTRAP
 # ============================================================
 
-# 1️⃣ Crear carpeta del proyecto
+# 1️⃣ Crear carpeta del proyecto 
+```
 mkdir UIII_Agencia_0330
 cd UIII_Agencia_0330
 code .
-
+```
 # 2️⃣ Crear entorno virtual
+```
 python -m venv .venv
-
+```
 # 3️⃣ Activar entorno virtual
 # En Windows:
+```
 .venv\Scripts\activate
 # En Mac/Linux:
 source .venv/bin/activate
-
+```
 # 4️⃣ Instalar Django
+```
 pip install django
-
+```
 # 5️⃣ Crear el proyecto principal
+```
 django-admin startproject backend_Agencia .
-
+```
 # 6️⃣ Crear la aplicación
+```
 python manage.py startapp app_Agencia
-
+```
 # ============================================================
 # ESTRUCTURA FINAL DE CARPETAS
 # ============================================================
+```
 # UIII_Agencia_0330/
 # ├── .venv/
 # ├── backend_Agencia/
@@ -59,11 +66,13 @@ python manage.py startapp app_Agencia
 # │   ├── urls.py
 # │   └── views.py
 # ├── manage.py
+```
 # ============================================================
 
 # ============================================================
 # 1️⃣2️⃣ MODELOS: app_Agencia/models.py
 # ============================================================
+```
 from django.db import models
 
 class Cliente(models.Model):
@@ -106,10 +115,11 @@ class Pago(models.Model):
 
     def __str__(self):
         return f"Pago {self.referencia} - ${self.monto}"
-
+```
 # ============================================================
 # 1️⃣4️⃣ VISTAS: app_Agencia/views.py
 # ============================================================
+```
 from django.shortcuts import render, redirect
 from .models import Cliente
 
@@ -148,10 +158,11 @@ def borrar_cliente(request, cliente_id):
         cliente.delete()
         return redirect('ver_clientes')
     return render(request, 'clientes/borrar_cliente.html', {'cliente': cliente})
-
+```
 # ============================================================
 # 2️⃣4️⃣ URLs: app_Agencia/urls.py
 # ============================================================
+```
 from django.urls import path
 from . import views
 
@@ -162,10 +173,11 @@ urlpatterns = [
     path('clientes/actualizar/<int:cliente_id>/', views.actualizar_cliente, name='actualizar_cliente'),
     path('clientes/borrar/<int:cliente_id>/', views.borrar_cliente, name='borrar_cliente'),
 ]
-
+```
 # ============================================================
 # 2️⃣6️⃣ URLs PRINCIPALES: backend_Agencia/urls.py
 # ============================================================
+```
 from django.contrib import admin
 from django.urls import path, include
 
@@ -173,10 +185,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app_Agencia.urls')),
 ]
-
+```
 # ============================================================
 # 2️⃣5️⃣ Agregar la app en settings.py
 # ============================================================
+```
 # En backend_Agencia/settings.py:
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -187,17 +200,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app_Agencia',
 ]
-
+```
 # ============================================================
 # 2️⃣7️⃣ Registrar modelos: app_Agencia/admin.py
 # ============================================================
+```
 from django.contrib import admin
 from .models import Cliente, Casa, Pago
 
 admin.site.register(Cliente)
 admin.site.register(Casa)
 admin.site.register(Pago)
-
+```
 # ============================================================
 # 1️⃣5️⃣ Y 1️⃣6️⃣ TEMPLATES
 # ============================================================
@@ -205,6 +219,7 @@ admin.site.register(Pago)
 # ==========================
 # base.html
 # ==========================
+```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -223,17 +238,19 @@ admin.site.register(Pago)
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
+```
 # ==========================
 # header.html
 # ==========================
+```
 <header class="bg-primary text-white text-center py-3">
     <h1 class="fw-bold">Sistema Agencia Inmobiliaria</h1>
 </header>
-
+```
 # ==========================
 # navbar.html
 # ==========================
+```
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">🏠 Agencia</a>
@@ -249,17 +266,19 @@ admin.site.register(Pago)
     </div>
   </div>
 </nav>
-
+```
 # ==========================
 # footer.html
 # ==========================
+```
 <footer class="bg-primary text-white text-center py-3 mt-5">
     <p>© {{ now|date:"Y" }} Agencia Inmobiliaria. Todos los derechos reservados.</p>
 </footer>
-
+```
 # ==========================
 # inicio.html
 # ==========================
+```
 {% extends 'base.html' %}
 {% block content %}
 <div class="text-center">
@@ -269,10 +288,11 @@ admin.site.register(Pago)
          alt="Agencia Inmobiliaria" class="img-fluid rounded shadow mt-3" width="600">
 </div>
 {% endblock %}
-
+```
 # ==========================
 # clientes/agregar_cliente.html
 # ==========================
+```
 {% extends 'base.html' %}
 {% block content %}
 <h2 class="text-center text-success mb-3">Agregar Cliente</h2>
@@ -297,10 +317,11 @@ admin.site.register(Pago)
     <button type="submit" class="btn btn-primary">Agregar</button>
 </form>
 {% endblock %}
-
+```
 # ==========================
 # clientes/ver_clientes.html
 # ==========================
+```
 {% extends 'base.html' %}
 {% block content %}
 <h2 class="text-center text-info">Lista de Clientes</h2>
@@ -332,10 +353,11 @@ admin.site.register(Pago)
     </tbody>
 </table>
 {% endblock %}
-
+```
 # ==========================
 # clientes/actualizar_cliente.html
 # ==========================
+```
 {% extends 'base.html' %}
 {% block content %}
 <h2 class="text-center text-warning mb-3">Actualizar Cliente</h2>
@@ -360,10 +382,11 @@ admin.site.register(Pago)
     <button type="submit" class="btn btn-success">Guardar Cambios</button>
 </form>
 {% endblock %}
-
+```
 # ==========================
 # clientes/borrar_cliente.html
 # ==========================
+```
 {% extends 'base.html' %}
 {% block content %}
 <h2 class="text-center text-danger">Eliminar Cliente</h2>
@@ -374,15 +397,19 @@ admin.site.register(Pago)
     <a href="/clientes/" class="btn btn-secondary">Cancelar</a>
 </form>
 {% endblock %}
-
+```
 # ============================================================
 # 1️⃣2.5️⃣ Migraciones
+```
 python manage.py makemigrations
 python manage.py migrate
+```
 
 # ============================================================
 # 3️⃣1️⃣ Ejecutar el servidor en puerto 8030
+```
 python manage.py runserver 8030
+```
 # Acceder en el navegador: http://127.0.0.1:8030/
 # ============================================================
 
