@@ -59,8 +59,7 @@ class Cliente(models.Model):
     tipo_cliente = models.CharField(max_length=50, default="Regular")
     observaciones = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return self.nombre_completo
+    
 
 
 # ==========================================
@@ -76,9 +75,7 @@ class Casa(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="casas")  
     numero_registro = models.CharField(max_length=50, unique=True)
 
-    def __str__(self):
-        return f"{self.tipo} en {self.ciudad}"
-
+   
 
 # ==========================================
 # MODELO: PAGOS
@@ -93,8 +90,7 @@ class Pago(models.Model):
     casas = models.ManyToManyField(Casa, related_name="pagos")
     estatus_pago = models.CharField(max_length=50, default="Completado")
 
-    def __str__(self):
-        return f"Pago {self.referencia} - ${self.monto}"
+    
 
 # 1️⃣2.5️⃣ Realizar migraciones (makemigrations y migrate):
 🛠️ Ejecuta estos dos comandos en tu terminal para que Django cree la base de datos:
